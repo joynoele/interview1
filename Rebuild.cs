@@ -10,9 +10,9 @@ public async Task<String> RebuildConfigurations(
         var message = new RebuildConfigurationCommand
     {
         ConfigurationId = id,
-		TenantId = tenantId,
+	TenantId = tenantId,
         Timestamp = DateTimeOffset.UtcNow,
-		CorrelationId = new Guid(),
+	CorrelationId = new Guid(),
     };
         await mainTopic.PublishMessageAsync(message, cancellationToken).ConfigureAwait(false);
     }
@@ -20,9 +20,9 @@ public async Task<String> RebuildConfigurations(
     {
         var message = new RebuildTenantConfigurationsCommand
         {
-            TenantId = id,
+	    TenantId = id,
             Timestamp = DateTime.UtcNow,
-			CorrelationId = new Guid()
+	    CorrelationId = new Guid()
         };
         await mainTopic.PublishMessageAsync(message, cancellationToken).ConfigureAwait(false);
     }
