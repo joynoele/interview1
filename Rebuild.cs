@@ -1,7 +1,7 @@
 [CliCommand("rebuildconfigurations", "Rebuilds all of the configurations for the tenant. If a configuration Id is given then only that configuration will be rebuilt.")]
-public async Task<String> RebuildPolicies(
+public async Task<String> RebuildConfigurations(
 	[CliValueParameter("The guid id of the tenant (required)", "tenant id", Name = "tid")] Guid tenantId,
-			[CliValueParameter("An id for the configuration (optional)", "policy id")] Guid? id, 
+			[CliValueParameter("An id for the configuration (optional)", "configuration id")] Guid? id, 
 	ServiceBusTopicPublisher mainTopic,
     CancellationToken cancellationToken)
 {
@@ -10,9 +10,9 @@ public async Task<String> RebuildPolicies(
         var message = new RebuildConfigurationCommand
     {
         ConfigurationId = id,
-	TenantId = tenantId,
+		TenantId = tenantId,
         Timestamp = DateTimeOffset.UtcNow,
-	CorrelationId = new Guid(),
+		CorrelationId = new Guid(),
     };
         await mainTopic.PublishMessageAsync(message, cancellationToken).ConfigureAwait(false);
     }
@@ -22,7 +22,7 @@ public async Task<String> RebuildPolicies(
         {
             TenantId = id,
             Timestamp = DateTime.UtcNow,
-	    CorrelationId = new Guid()
+			CorrelationId = new Guid()
         };
         await mainTopic.PublishMessageAsync(message, cancellationToken).ConfigureAwait(false);
     }
