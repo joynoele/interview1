@@ -14,16 +14,15 @@ public async Task<string> RebuildConfigurations(
             Timestamp = DateTimeOffset.UtcNow
 	};
         await mainTopic.PublishMessageAsync(message, cancellationToken).ConfigureAwait(false);
+	return "Message post complete.";
     }
-    else
+
+    var message = new RebuildTenantConfigurationsCommand
     {
-        var message = new RebuildTenantConfigurationsCommand
-        {
-	    TenantId = id,
-            Timestamp = DateTime.UtcNow
-        };
-        await mainTopic.PublishMessageAsync(message, cancellationToken).ConfigureAwait(false);
-    }
-    
+        TenantId = tenantId,
+        Timestamp = DateTime.UtcNow
+    };
+
+    await mainTopic.PublishMessageAsync(message, cancellationToken).ConfigureAwait(false);
     return "Message post complete.";
 }
