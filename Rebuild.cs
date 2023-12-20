@@ -1,19 +1,18 @@
 [CliCommand("rebuildconfigurations", "Rebuilds all of the configurations for the tenant. If a configuration Id is given then only that configuration will be rebuilt.")]
-public async Task<String> RebuildConfigurations(
+public async Task<string> RebuildConfigurations(
 	[CliValueParameter("The guid id of the tenant (required)", "tenant id", Name = "tid")] Guid tenantId,
-			[CliValueParameter("An id for the configuration (optional)", "configuration id")] Guid? id, 
+	[CliValueParameter("An id for the configuration (optional)", "configuration id")] Guid id, 
 	ServiceBusTopicPublisher mainTopic,
-    CancellationToken cancellationToken)
+    	CancellationToken cancellationToken)
 {
     if (id != new Guid())
     {
         var message = new RebuildConfigurationCommand
-    {
-        ConfigurationId = id,
-	TenantId = tenantId,
-        Timestamp = DateTimeOffset.UtcNow,
-	CorrelationId = new Guid(),
-    };
+   	{
+            ConfigurationId = id,
+	    TenantId = tenantId,
+            Timestamp = DateTimeOffset.UtcNow
+	};
         await mainTopic.PublishMessageAsync(message, cancellationToken).ConfigureAwait(false);
     }
     else
@@ -21,11 +20,10 @@ public async Task<String> RebuildConfigurations(
         var message = new RebuildTenantConfigurationsCommand
         {
 	    TenantId = id,
-            Timestamp = DateTime.UtcNow,
-	    CorrelationId = new Guid()
+            Timestamp = DateTime.UtcNow
         };
         await mainTopic.PublishMessageAsync(message, cancellationToken).ConfigureAwait(false);
     }
     
-    return "Masssage post complete.";
+    return "Message post complete.";
 }
